@@ -8,9 +8,11 @@ import com.berruhanedar.app.enums.ActionType;
 import com.berruhanedar.app.mapper.TrainerWorkloadMapper;
 import com.berruhanedar.app.repository.TrainerWorkloadRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TrainerWorkloadService {
@@ -20,6 +22,11 @@ public class TrainerWorkloadService {
 
     @Transactional
     public void processWorkload(TrainerWorkloadRequestDto request) {
+        log.info("Processing trainer workload. trainerUsername={}, trainingDate={}, duration={}, actionType={}",
+                request.getTrainerUsername(),
+                request.getTrainingDate(),
+                request.getTrainingDuration(),
+                request.getActionType());
         TrainerWorkload trainer = trainerWorkloadRepository.findByTrainerUsername(request.getTrainerUsername()).orElseGet(() -> trainerWorkloadMapper.toEntity(request));
         int year = request.getTrainingDate().getYear();
         int month = request.getTrainingDate().getMonthValue();
@@ -27,6 +34,11 @@ public class TrainerWorkloadService {
         MonthSummary monthSummary = yearSummary.getMonths().stream().filter(m -> m.getMonth().equals(month)).findFirst().orElseGet(() -> createMonthSummary(yearSummary, month));
         updateDuration(monthSummary, request);
         trainerWorkloadRepository.save(trainer);
+        log.info("Trainer workload processed successfully. trainerUsername={}, year={}, month={}, totalDuration={}",
+                request.getTrainerUsername(),
+                year,
+                month,
+                monthSummary.getTrainingSummaryDuration());
     }
 
     private YearSummary createYearSummary(TrainerWorkload trainer, int year) {
