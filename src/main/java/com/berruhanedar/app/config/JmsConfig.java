@@ -19,42 +19,20 @@ public class JmsConfig {
 
     @Bean
     public MessageConverter jacksonJmsMessageConverter(JsonMapper jsonMapper) {
-
-        JacksonJsonMessageConverter converter =
-                new JacksonJsonMessageConverter(jsonMapper);
-
+        JacksonJsonMessageConverter converter = new JacksonJsonMessageConverter(jsonMapper);
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
-
-        converter.setTypeIdMappings(
-                Map.of(
-                        "trainerWorkload",
-                        TrainerWorkloadRequestDto.class
-                )
-        );
-
+        converter.setTypeIdMappings(Map.of("trainerWorkload", TrainerWorkloadRequestDto.class));
         return converter;
     }
 
     @Bean
-    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(
-            ConnectionFactory connectionFactory,
-            MessageConverter messageConverter) {
-
-        DefaultJmsListenerContainerFactory factory =
-                new DefaultJmsListenerContainerFactory();
-
+    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter);
         factory.setConcurrency("2-5");
-
-        factory.setErrorHandler(exception ->
-                log.error(
-                        "Error while processing JMS message",
-                        exception
-                )
-        );
-
+        factory.setErrorHandler(exception -> log.error("Error while processing JMS message", exception));
         return factory;
     }
 }
