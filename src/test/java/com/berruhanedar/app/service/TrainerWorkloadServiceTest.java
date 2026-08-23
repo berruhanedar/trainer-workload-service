@@ -1,4 +1,4 @@
-package com.berruhanedar.app;
+package com.berruhanedar.app.service;
 
 import com.berruhanedar.app.dto.TrainerWorkloadRequestDto;
 import com.berruhanedar.app.entity.MonthSummary;
@@ -7,7 +7,6 @@ import com.berruhanedar.app.entity.YearSummary;
 import com.berruhanedar.app.enums.ActionType;
 import com.berruhanedar.app.mapper.TrainerWorkloadMapper;
 import com.berruhanedar.app.repository.TrainerWorkloadRepository;
-import com.berruhanedar.app.service.TrainerWorkloadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
