@@ -26,7 +26,7 @@ public class TrainerWorkload {
 
     private String trainerLastName;
 
-    private Boolean status;
+    private Boolean active;
 
     private List<YearSummary> years = new ArrayList<>();
 }

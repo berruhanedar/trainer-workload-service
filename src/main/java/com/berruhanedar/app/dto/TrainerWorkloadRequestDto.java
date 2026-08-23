@@ -27,7 +27,7 @@ public class TrainerWorkloadRequestDto {
     private String trainerLastName;
 
     @NotNull
-    private Boolean status;
+    private Boolean active;
 
     @NotNull
     private LocalDate trainingDate;
