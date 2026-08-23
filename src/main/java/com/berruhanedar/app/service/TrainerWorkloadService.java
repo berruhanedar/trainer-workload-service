@@ -10,7 +10,6 @@ import com.berruhanedar.app.repository.TrainerWorkloadRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -20,7 +19,6 @@ public class TrainerWorkloadService {
     private final TrainerWorkloadRepository trainerWorkloadRepository;
     private final TrainerWorkloadMapper trainerWorkloadMapper;
 
-    @Transactional
     public void processWorkload(TrainerWorkloadRequestDto request) {
         log.info("Processing trainer workload. trainerUsername={}, trainingDate={}, duration={}, actionType={}",
                 request.getTrainerUsername(),
@@ -44,7 +42,6 @@ public class TrainerWorkloadService {
     private YearSummary createYearSummary(TrainerWorkload trainer, int year) {
         YearSummary summary = new YearSummary();
         summary.setYear(year);
-        summary.setTrainerWorkload(trainer);
         trainer.getYears().add(summary);
         return summary;
     }
@@ -53,7 +50,6 @@ public class TrainerWorkloadService {
         MonthSummary summary = new MonthSummary();
         summary.setMonth(month);
         summary.setTrainingSummaryDuration(0);
-        summary.setYearSummary(yearSummary);
         yearSummary.getMonths().add(summary);
         return summary;
     }

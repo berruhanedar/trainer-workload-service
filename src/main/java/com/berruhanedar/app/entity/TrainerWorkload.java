@@ -1,16 +1,18 @@
 package com.berruhanedar.app.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "trainer_workloads")
+@Document(collection = "trainer_workloads")
+@CompoundIndex(name = "trainer_name_idx", def = "{'trainerFirstName': 1, 'trainerLastName': 1}")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,21 +20,15 @@ import java.util.List;
 public class TrainerWorkload {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(nullable = false, unique = true)
     private String trainerUsername;
 
-    @Column(nullable = false)
     private String trainerFirstName;
 
-    @Column(nullable = false)
     private String trainerLastName;
 
-    @Column(nullable = false)
     private Boolean active;
 
-    @OneToMany(mappedBy = "trainerWorkload", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<YearSummary> years = new ArrayList<>();
 }

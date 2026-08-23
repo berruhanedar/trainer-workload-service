@@ -1,13 +1,11 @@
 package com.berruhanedar.app.repository;
 
 import com.berruhanedar.app.entity.TrainerWorkload;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-@Repository
-public interface TrainerWorkloadRepository extends JpaRepository<TrainerWorkload, Long> {
+public interface TrainerWorkloadRepository extends MongoRepository<TrainerWorkload, String> {
 
     Optional<TrainerWorkload> findByTrainerUsername(String trainerUsername);
 }
