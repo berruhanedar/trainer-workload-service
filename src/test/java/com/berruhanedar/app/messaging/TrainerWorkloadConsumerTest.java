@@ -41,7 +41,7 @@ class TrainerWorkloadConsumerTest {
     @Test
     void shouldProcessTrainerWorkloadWhenMessageIsReceived() {
 
-        trainerWorkloadConsumer.consume(request);
+        trainerWorkloadConsumer.consume(request, "test-transaction-id");
 
         verify(trainerWorkloadService)
                 .processWorkload(request);
