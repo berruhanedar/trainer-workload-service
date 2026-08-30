@@ -10,3 +10,9 @@ Feature: Trainer workload message processing
     And the transaction id is missing
     When the trainer workload message is consumed
     Then the trainer workload should be processed successfully
+
+  Scenario: Reject a trainer workload message with invalid duration
+    Given a trainer workload message with invalid duration
+    When the trainer workload message is validated
+    Then the trainer workload message should be invalid
+    And the trainer workload service should not be called
