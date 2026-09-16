@@ -22,34 +22,17 @@ class JmsConfigTest {
 
     @Test
     void shouldCreateJacksonJmsMessageConverter() {
-
         JsonMapper jsonMapper = JsonMapper.builder().build();
-
-        MessageConverter converter =
-                jmsConfig.jacksonJmsMessageConverter(jsonMapper);
-
+        MessageConverter converter = jmsConfig.jacksonJmsMessageConverter(jsonMapper);
         assertNotNull(converter);
-        assertInstanceOf(
-                JacksonJsonMessageConverter.class,
-                converter
-        );
+        assertInstanceOf(JacksonJsonMessageConverter.class, converter);
     }
 
     @Test
     void shouldCreateJmsListenerContainerFactory() {
-
-        ConnectionFactory connectionFactory =
-                mock(ConnectionFactory.class);
-
-        MessageConverter messageConverter =
-                mock(MessageConverter.class);
-
-        DefaultJmsListenerContainerFactory factory =
-                jmsConfig.jmsListenerContainerFactory(
-                        connectionFactory,
-                        messageConverter
-                );
-
+        ConnectionFactory connectionFactory = mock(ConnectionFactory.class);
+        MessageConverter messageConverter = mock(MessageConverter.class);
+        DefaultJmsListenerContainerFactory factory = jmsConfig.jmsListenerContainerFactory(connectionFactory, messageConverter);
         assertNotNull(factory);
     }
 }

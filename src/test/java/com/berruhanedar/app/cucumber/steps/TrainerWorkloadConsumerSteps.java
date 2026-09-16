@@ -26,11 +26,9 @@ public class TrainerWorkloadConsumerSteps {
 
     @Mock
     private TrainerWorkloadService trainerWorkloadService;
-
     private TrainerWorkloadConsumer trainerWorkloadConsumer;
     private TrainerWorkloadRequestDto request;
     private String transactionId;
-
     private Validator validator;
     private Set<ConstraintViolation<TrainerWorkloadRequestDto>> violations;
 
@@ -38,15 +36,12 @@ public class TrainerWorkloadConsumerSteps {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         trainerWorkloadConsumer = new TrainerWorkloadConsumer(trainerWorkloadService);
-        validator = Validation
-                .buildDefaultValidatorFactory()
-                .getValidator();
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     @Given("a valid trainer workload message")
     public void aValidTrainerWorkloadMessage() {
         request = new TrainerWorkloadRequestDto();
-
         request.setTrainerUsername("john.smith");
         request.setTrainerFirstName("John");
         request.setTrainerLastName("Smith");
@@ -54,25 +49,19 @@ public class TrainerWorkloadConsumerSteps {
         request.setTrainingDate(LocalDate.of(2026, 8, 23));
         request.setTrainingDuration(60);
         request.setActionType(ActionType.ADD);
-
         transactionId = "test-transaction-id";
     }
 
     @Given("a trainer workload message with invalid duration")
     public void aTrainerWorkloadMessageWithInvalidDuration() {
         request = new TrainerWorkloadRequestDto();
-
         request.setTrainerUsername("john.smith");
         request.setTrainerFirstName("John");
         request.setTrainerLastName("Smith");
         request.setActive(true);
         request.setTrainingDate(LocalDate.of(2026, 8, 23));
-
-        // Invalid because trainingDuration has @Positive
         request.setTrainingDuration(0);
-
         request.setActionType(ActionType.ADD);
-
         transactionId = "test-transaction-id";
     }
 
@@ -100,19 +89,11 @@ public class TrainerWorkloadConsumerSteps {
     @Then("the trainer workload message should be invalid")
     public void theTrainerWorkloadMessageShouldBeInvalid() {
         assertThat(violations).isNotEmpty();
-
-        assertThat(
-                violations.stream()
-                        .anyMatch(violation ->
-                                violation.getPropertyPath()
-                                        .toString()
-                                        .equals("trainingDuration"))
-        ).isTrue();
+        assertThat(violations.stream().anyMatch(violation -> violation.getPropertyPath().toString().equals("trainingDuration"))).isTrue();
     }
 
     @And("the trainer workload service should not be called")
     public void theTrainerWorkloadServiceShouldNotBeCalled() {
-        verify(trainerWorkloadService, never())
-                .processWorkload(request);
+        verify(trainerWorkloadService, never()).processWorkload(request);
     }
 }
