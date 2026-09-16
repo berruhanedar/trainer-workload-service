@@ -10,8 +10,10 @@ import com.berruhanedar.app.repository.TrainerWorkloadRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Profile;
 
 @Slf4j
+@Profile("!docker")
 @Service
 @RequiredArgsConstructor
 public class TrainerWorkloadService {

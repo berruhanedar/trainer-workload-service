@@ -36,115 +36,51 @@ class TransactionIdFilterTest {
     }
 
     @Test
-    void shouldUseExistingTransactionIdFromRequestHeader()
-            throws Exception {
-
+    void shouldUseExistingTransactionIdFromRequestHeader() throws Exception {
         String transactionId = "test-transaction-id";
-
-        when(request.getHeader("X-Transaction-Id"))
-                .thenReturn(transactionId);
-
-        transactionIdFilter.doFilterInternal(
-                request,
-                response,
-                filterChain
-        );
-
-        verify(response).setHeader(
-                "X-Transaction-Id",
-                transactionId
-        );
-
-        verify(filterChain).doFilter(
-                request,
-                response
-        );
-
+        when(request.getHeader("X-Transaction-Id")).thenReturn(transactionId);
+        transactionIdFilter.doFilterInternal(request, response, filterChain);
+        verify(response).setHeader("X-Transaction-Id", transactionId);
+        verify(filterChain).doFilter(request, response);
         assertNull(MDC.get("transactionId"));
     }
 
     @Test
-    void shouldGenerateTransactionIdWhenHeaderIsMissing()
-            throws Exception {
-
-        when(request.getHeader("X-Transaction-Id"))
-                .thenReturn(null);
-
-        transactionIdFilter.doFilterInternal(
-                request,
-                response,
-                filterChain
-        );
-
-        verify(response).setHeader(
-                eq("X-Transaction-Id"),
-                argThat(value -> {
+    void shouldGenerateTransactionIdWhenHeaderIsMissing() throws Exception {
+        when(request.getHeader("X-Transaction-Id")).thenReturn(null);
+        transactionIdFilter.doFilterInternal(request, response, filterChain);
+        verify(response).setHeader(eq("X-Transaction-Id"), argThat(value -> {
                     assertNotNull(value);
                     assertFalse(value.isBlank());
                     return true;
                 })
         );
 
-        verify(filterChain).doFilter(
-                request,
-                response
-        );
-
+        verify(filterChain).doFilter(request, response);
         assertNull(MDC.get("transactionId"));
     }
 
     @Test
-    void shouldGenerateTransactionIdWhenHeaderIsBlank()
-            throws Exception {
-
-        when(request.getHeader("X-Transaction-Id"))
-                .thenReturn("   ");
-
-        transactionIdFilter.doFilterInternal(
-                request,
-                response,
-                filterChain
-        );
-
-        verify(response).setHeader(
-                eq("X-Transaction-Id"),
+    void shouldGenerateTransactionIdWhenHeaderIsBlank() throws Exception {
+        when(request.getHeader("X-Transaction-Id")).thenReturn("   ");
+        transactionIdFilter.doFilterInternal(request, response, filterChain);
+        verify(response).setHeader(eq("X-Transaction-Id"),
                 argThat(value -> {
                     assertNotNull(value);
                     assertFalse(value.isBlank());
                     return true;
                 })
         );
-
-        verify(filterChain).doFilter(
-                request,
-                response
-        );
-
+        verify(filterChain).doFilter(request, response);
         assertNull(MDC.get("transactionId"));
     }
 
     @Test
-    void shouldRemoveTransactionIdFromMdcWhenFilterChainThrowsException()
-            throws Exception {
-
+    void shouldRemoveTransactionIdFromMdcWhenFilterChainThrowsException() throws Exception {
         String transactionId = "test-transaction-id";
-
-        when(request.getHeader("X-Transaction-Id"))
-                .thenReturn(transactionId);
-
-        doThrow(new RuntimeException("Test exception"))
-                .when(filterChain)
-                .doFilter(request, response);
-
-        assertThrows(
-                RuntimeException.class,
-                () -> transactionIdFilter.doFilterInternal(
-                        request,
-                        response,
-                        filterChain
-                )
-        );
-
+        when(request.getHeader("X-Transaction-Id")).thenReturn(transactionId);
+        doThrow(new RuntimeException("Test exception")).when(filterChain).doFilter(request, response);
+        assertThrows(RuntimeException.class, () -> transactionIdFilter.doFilterInternal(request, response, filterChain));
         assertNull(MDC.get("transactionId"));
     }
 }
