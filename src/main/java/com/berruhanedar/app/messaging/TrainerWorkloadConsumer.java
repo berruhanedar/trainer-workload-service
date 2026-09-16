@@ -9,11 +9,13 @@ import org.slf4j.MDC;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Profile;
 
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Profile("!docker")
 @Slf4j
 public class TrainerWorkloadConsumer {
 
